@@ -1,9 +1,11 @@
 
-
-
 <%= render "users/list", user: @user, book: @book %>
 
 <div class="col-xs-9">
+
+<% if flash[:success] %>
+  <p class="success"><%= flash[:success] %></p>
+<% end %>
 
 <h1>Books</h1>
 
@@ -25,6 +27,22 @@
       </td>
       <td><%= link_to book.title, book_path(book) %></td>
       <td><%= book.body %></td>
+      <% if book.favorited_by?(current_user) %>
+          <td>
+            <%= link_to book_favorites_path(book), method: :delete do %>
+              <i class="far fa-heart" aria-hidden="true" style="color: red;"></i>
+              <%= book.favorites.count %>
+            <% end %>
+          <td>
+      <% else %>
+          <td>
+            <%= link_to book_favorites_path(book), method: :post do %>
+              <i class="fas fa-heart" aria-hidden="true"></i>
+              <%= book.favorites.count %>
+            <% end %>
+          <td>
+      <% end %>
+      <td>コメント数：<%= book.post_comments.count %></td>
     </tr>
 <% end %>
   </tbody>
