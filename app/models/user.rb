@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_many :followed, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
   has_many :following_user, through: :follower, source: :followed
   has_many :follower_user, through: :followed, source: :follower
+  has_many :entries, dependent: :destroy
+  has_many :messages, dependent: :destroy
 
   # ユーザーをフォローする
   def follow(user_id)
@@ -28,6 +30,22 @@ class User < ApplicationRecord
   # フォロー確認をおこなう
   def following?(user)
     following_user.include?(user)
+  end
+
+  def User.search(search, user_or_book, how_search)
+    if user_or_book == "1"
+      if how_search == "1"
+        User.where(['name LIKE ?', "#{search}"])
+      elsif how_search == "2"
+        User.where(['name LIKE ?', "#{search}%"])
+      elsif how_search == "3"
+        User.where(['name LIKE ?', "%#{search}"])
+      elsif how_search == "4"
+        User.where(['name LIKE ?', "%#{search}%"])
+      else
+        User.all
+      end
+    end
   end
   
 end

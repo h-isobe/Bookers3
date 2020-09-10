@@ -54,6 +54,17 @@ class BooksController < ApplicationController
     redirect_to books_path
   end
 
+  def search
+    @user_or_book = params[:option]
+
+    @has_search = params[:choice]
+    if @user_or_book == "1"
+      @users = User.search(params[:search], @user_or_book, @has_search)
+    else
+      @books = Book.search(params[:search], @user_or_book, @has_search)
+    end
+  end
+
   private
 
   def book_params

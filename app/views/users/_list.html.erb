@@ -23,15 +23,15 @@
         </tr>
         <tr>
           <th>follows</th>
-          <th><%= user.follower.count %></th>
+          <th><%= link_to user.follower.count, follower_path(user) %></th>
         </tr>
         <tr>
           <th>followers</th>
-          <th><%= user.followed.count %></th>
+          <th><%= link_to user.followed.count, followed_path(user) %></th>
         </tr>
       </tbody>
     </table>
-    <% if user.id == current_user.id %>
+    <% if user == current_user %>
       <%= link_to "編集", edit_user_path(user.id) %>
     <% else %>
       <% unless user == current_user %>
@@ -41,6 +41,20 @@
               <%= link_to 'フォローする', follow_path(user.id), method: :POST %>
             <% end %>
           <% end %>
+    <% end %>
+
+    <% if @user.id == current_user.id %>
+    <% else %>
+      <% if @isRoom == true %>
+        <p><a href="/rooms/<%= @roomId %>">チャットへ</a>
+      <% else %>
+        <%= form_for @room do |f| %>
+          <%= fields_for @entry do |e| %>
+            <%= e.hidden_field :user_id, :value=> @user.id %>
+          <% end %>
+          <%= f.submit "チャットを始める" %>
+        <% end %>
+      <% end %>
     <% end %>
 
   <h1>New book</h1>
