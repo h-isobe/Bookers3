@@ -64,7 +64,18 @@
       <h4>Title</h4>
       <%= f.text_field :title %>
       <h4>Opinion</h4>
-      <%= f.text_field :body %><br>
+      <%= f.label :prefecture, '都道府県' %><br>
+      <%= f.select :prefecture, Book.prefectures.keys, {prompt: '選択してください'}, class: 'signup_input signup_input--prefecture error-form--prefecture' %>
+      <div class="category-form">
+        <%= f.label :category, 'カテゴリ' %><br>
+          <%= f.collection_check_boxes(:category_ids, Category.all, :id, :name) do |category| %> 
+          <%= category.label do %>
+            <%= category.check_box %>
+            <%= category.text %>
+          <% end %>
+        <% end %>
+      </div>
+      <%= f.text_field :body, size: 10*3 %><br>
       <%= f.submit "Create Book" %>
 
     <% end %>
